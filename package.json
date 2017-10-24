@@ -1,0 +1,26 @@
+{
+  "name": "captain-hook",
+  "version": "1.0.0",
+  "description": "Configurable mix-in providing event hook functionality for JavaScript objects/prototypes",
+  "main": "captain-hook.umd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelfranzl/captain-hook.git"
+  },
+  "keywords": [
+    "javascript",
+    "hooks",
+    "filters",
+    "actions",
+    "plugins"
+  ],
+  "author": "Michael Franzl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michaelfranzl/captain-hook/issues"
+  },
+  "homepage": "https://github.com/michaelfranzl/captain-hook"
+}
