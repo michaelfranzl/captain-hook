@@ -85,7 +85,7 @@ If you prefer classes:
     luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); } )
     luna.poop();
     // -> I am pooping
-    // -> Cleaning up poop
+    // -> Cleaning up poop of Luna
     
     elvis = new Dog('Elvis');
     elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
@@ -114,7 +114,7 @@ If you prefer 'old-style' prototypes:
     luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); } )
     luna.poop();
     // -> I am pooping
-    // -> Cleaning up poop
+    // -> Cleaning up poop of Luna
     
     elvis = new Dog('Elvis');
     elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
@@ -176,7 +176,7 @@ In the example below, note that we pass the configuration `handlers_prop: null`.
     luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); })
     luna.poop();
     // -> I am pooping
-    // -> Cleaning up poop
+    // -> Cleaning up poop of Luna
     
     elvis = new Dog('Elvis');
     elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
@@ -184,7 +184,7 @@ In the example below, note that we pass the configuration `handlers_prop: null`.
     // -> I am pooping
     // -> Oh no, another dog pooped!
     
-    // Note that there is no way to read or modify the added event handlers via the instances.
+    // Note that there is no way to read or modify the added event handlers via the `luna` or `elvis` instances.
 ```
     
 If you prefer to work with plain objects:
