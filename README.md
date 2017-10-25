@@ -281,6 +281,8 @@ There are three distinct use cases for event handlers:
 2. Content filtering (arguments modified by reference, no return value)
 3. Queries (with return value)
 
+All three cases can be covered with the `on()` method.
+
 To illustrate, we are going to implement a simple Cat:
 
 ```javascript
@@ -324,21 +326,25 @@ To illustrate, we are going to implement a simple Cat:
 
 Instantiate the application:
 
+```javascript
     var felix = new Cat();
+```
     
 Generic behavior:
     
-    
+```javascript
     felix.makeSound();
     // -> I make sound: "meow"
     
     felix.scratch();
     // -> Scratch!
+```
     
 Use event handlers in three possible ways:
 
 **1\. Simple observer** (no return value, no content filtering):
 
+```javascript
     felix.on('makeSound', function() {
       console.log("Felix is about to make a sound.")
     });
@@ -347,18 +353,22 @@ Use event handlers in three possible ways:
     
     // -> Felix is about to make a sound.
     // -> I make sound: "meow"
+```
 
 **2\. Filter content passed by reference** (no return value):
 
+```javascript
     felix.on('makeSound', function(opts) {
       opts.sound += ' hiss';
     });
     
     felix.makeSound();
     // -> I make sound: "meow hiss"
+```
 
 **3\. Query responses.** Note that event handlers do not have access to the return values of any other event handler. Here, we define two event handlers who vote for different outcomes:
 
+```javascript
     felix.on('scratch', function() {
       return false; // I do not allow scratching.
     });
@@ -369,9 +379,11 @@ Use event handlers in three possible ways:
     
     felix.scratch();
     // -> I am not allowed to scratch, so I won't do it!
+```
     
 This is also useful for Promises:
     
+```javascript
     felix.on('askForFood', function() {
       console.log('Felix is asking for food');
       return new Promise(function(resolve, reject) {
@@ -394,3 +406,4 @@ This is also useful for Promises:
     
     felix.beHungry()
     // after 2 seconds -> I am eating ["dryfood", "sardines"]
+```
