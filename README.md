@@ -234,7 +234,7 @@ Options:
 * `on_prop` \<string> - Method property name for setting event handlers. Defaults to 'on'.
 * `off_prop` \<string> - Method property name for removing event handlers. Defaults to 'off'.
 * `emit_prop` \<string> - Method property name for calling event handlers. Defaults to '_emit'.
-* `handlers_prop` \<string> - Property name for storing event handlers. Defaults to '_handlers'. If `null`, a privately scoped storage will be used, in which case you need to mix in CaptainHook into every instance, otherwise event handlers would be shared across instances.
+* `handlers_prop` \<string|null> - Property name for storing event handlers. Defaults to '_handlers'. If `null`, a privately scoped storage will be used, in which case you need to mix in CaptainHook into every instance, otherwise event handlers would be shared across instances.
  
 
 
