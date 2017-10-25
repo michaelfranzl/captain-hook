@@ -66,6 +66,7 @@ Methods will be shared across all instances.
 
 If you prefer classes:
 
+```javascript
     captain_hook = CaptainHook(); // use defaults
     
     class Dog {
@@ -91,10 +92,11 @@ If you prefer classes:
     elvis.poop();
     // -> I am pooping
     // -> Oh no, another dog pooped!
-
+```
 
 If you prefer 'old-style' prototypes:
 
+```javascript
     captain_hook = CaptainHook();
 
     function Dog(name) {
@@ -119,10 +121,11 @@ If you prefer 'old-style' prototypes:
     elvis.poop();
     // -> I am pooping
     // -> Oh no, another dog pooped!
-
+```
 
 If you prefer to work with plain objects:
 
+```javascript
     captain_hook = CaptainHook();
 
     proto_dog = {};
@@ -148,7 +151,7 @@ If you prefer to work with plain objects:
     elvis.poop();
     // -> I am pooping
     // -> Oh no, another dog pooped!
-
+```
     
 #### 2\. Mix into instances
 
@@ -156,6 +159,7 @@ Each instance will have a full copy of the attributes/methods.
 
 In the example below, note that we pass the configuration `handlers_prop: null`. This makes the storage of the event handler functions private, preventing information leaks to external code.
 
+```javascript
     class Dog {
       constructor(name) {
         var captain_hook = CaptainHook({handlers_prop: null});
@@ -181,9 +185,11 @@ In the example below, note that we pass the configuration `handlers_prop: null`.
     // -> Oh no, another dog pooped!
     
     // Note that there is no way to read or modify the added event handlers via the instances.
+```
     
 If you prefer to work with plain objects:
 
+```javascript
     dog = {};
     dog.poop = function() { 
       console.log(`I am pooping.`);
@@ -203,8 +209,8 @@ If you prefer to work with plain objects:
     // -> I am pooping
     // -> Oh no, another dog pooped!
     
-    // Note that there is no way to read or modify the added event handlers via the `luna` instance.
-
+    // Note that there is no way to read or modify the added event handlers via the `luna` or `elvis` instances.
+```
 
 
 
