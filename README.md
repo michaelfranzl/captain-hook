@@ -1,5 +1,8 @@
 # captain-hook
 
+[![Build Status](https://travis-ci.org/michaelfranzl/captain-hook.svg?branch=master)](https://travis-ci.org/michaelfranzl/captain-hook)
+
+
 ## A configurable mix-in providing flexible event emission ("hooking") for JavaScript objects
 
 An event-emitter API enables clearly defined interaction between separate pieces of code (e.g. main application vs. plugins). Event emitting allows you to keep the functionality of your application general (make it more suitable to be published Open Source), while specializing its behavior by having external (perhaps proprietary) code hook into those events.
