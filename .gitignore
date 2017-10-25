@@ -4,3 +4,4 @@ build*
 bundle*
 *~
 *swp
+*.tgz
