@@ -44,7 +44,7 @@ var CaptainHook = function ({
   off_prop       = 'off',
   emit_prop      = '_emit',
   handlers_prop  = '_handlers',
-}) {
+} = {}) {
   
   let privatehandlers;
   if (handlers_prop == null) {

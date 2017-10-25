@@ -18,22 +18,43 @@ I found dozens of event emitter libraries on Github. Most of them were too large
 
 Features of my library:
 
+* No dependencies.
 * Only ~100 lines of code.
+* Only ~1800 bytes minified.
+* Works in browsers and in Node.js.
+* ES6 source.
+* Minified ES5 distribution file with source map.
+* Includes tests.
 * Attribute/method names are explicitly configurable.
-* Returns optional return values from event handlers as an array to the emitter
-* When adding event handlers, a supplied option object allows...
+* Returns to the emitter optional return values from event handlers as an array
+* When adding event handlers, a supplied option object allows
    * sorting the handler according to given priority,
    * setting the `this` context of the handler,
    * setting of a tag/label of the handler.
-* Event handlers can only be removed when their tag is known.
-* Private storage of event handlers and their options if needed.
-* Flexible use of the mix-in: add it to prototypes or to instances (see below).
+* Event handlers can only be removed when their tag is known. Prevents interaction between external plugin code.
+* The storage object for event handlers and their options can be privately scoped if needed. This is to ensure that external plugins cannot remove or inspect each other's event handlers.
+* Flexible use: add the mix-in to prototypes or to instances (see below).
 
-    
+
+### Development and building
+
+Install development dependencies (only needed to build the ES5/UMD versions):
+
+    npm install
+
+To generate an UMD module that works in browsers and Node.js:
+
+    npm run prepare
+
+Run tests on the UMD module:
+
+    npm test
+
+
     
 ### How to apply the mix-in
 
-If your environment imports ES6 modules, load `captain-hook.js`, otherwise load the Universal Module Definition (UMD) variant `captain-hook.umd.js`.
+If your environment can import ES6 modules directly, load `captain-hook.js`, otherwise load the Universal Module Definition (UMD) variant `dist/captain-hook.umd.min.js`.
 
 The default export of the module is a factory function (see `CaptainHook()` in the API section).
 
@@ -45,7 +66,7 @@ Methods will be shared across all instances.
 
 If you prefer classes:
 
-    captain_hook = CaptainHook({}); // use defaults
+    captain_hook = CaptainHook(); // use defaults
     
     class Dog {
       constructor(name) {
@@ -74,7 +95,7 @@ If you prefer classes:
 
 If you prefer 'old-style' prototypes:
 
-    captain_hook = CaptainHook({});
+    captain_hook = CaptainHook();
 
     function Dog(name) {
       this.name = name;
@@ -102,7 +123,7 @@ If you prefer 'old-style' prototypes:
 
 If you prefer to work with plain objects:
 
-    captain_hook = CaptainHook({});
+    captain_hook = CaptainHook();
 
     proto_dog = {};
     proto_dog.poop = function() { 
@@ -163,22 +184,20 @@ In the example below, note that we pass the configuration `handlers_prop: null`.
     
 If you prefer to work with plain objects:
 
-    captain_hook = CaptainHook({handlers_prop: null});
-    
     dog = {};
     dog.poop = function() { 
       console.log(`I am pooping.`);
       this._emit('poop', this.name);
     }
     
-    luna = Object.assign({}, captain_hook, dog);
+    luna = Object.assign({}, CaptainHook({handlers_prop: null}), dog);
     luna.name = 'Luna';
     luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); });
     luna.poop();
     // -> I am pooping
     // -> Cleaning up poop of Luna
     
-    elvis = new Dog('Elvis');
+    elvis = Object.assign({}, CaptainHook({handlers_prop: null}), dog);
     elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
     elvis.poop();
     // -> I am pooping
@@ -262,7 +281,7 @@ To illustrate, we are going to implement a simple Cat:
       var self = this; // be explicit
 
       // Generate the mix-in object with default property names
-      var hook_mixin = CaptainHook({});
+      var hook_mixin = CaptainHook();
 
       // Mix in the generated hook functionality.
       // This makes available to us self.on(), self.off(), self._emit()

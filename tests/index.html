@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <script src='../dist/captain-hook.umd.min.js'></script>
+    
+    <script>
+      window.addEventListener('load', function() {
+        var CaptainHook = captainHook.default;
+        var inst = CaptainHook({
+          on_prop: 'my_on',
+          off_prop: 'my_off',
+          once_prop: 'my_once',
+          emit_prop: '_my_emit',
+          handlers_prop: '_my_handlers',
+        });
+        
+        inst.add = function(num) {
+          return num + this.number + this._my_emit('add').reduce((i, j) => i + j, 0);
+        }
+        
+        inst.number = 1;
+
+        // for testing the default handler context
+        inst.my_on('add', function() {
+          return this.number;
+        });
+        
+        if (inst.add(3) == 5) {
+          console.warn('short test passed.');
+        } else {
+          console.error('short test failed.');
+        }
+      })
+    </script>
+    
+  </head>
+  <body>
+    Use development console to see test result.
+  </body>
+</html>

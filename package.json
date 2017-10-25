@@ -4,7 +4,8 @@
   "description": "Configurable mix-in providing event hook functionality for JavaScript objects/prototypes",
   "main": "captain-hook.umd.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test.js",
+    "prepare": "node scripts/build.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,10 @@
   "bugs": {
     "url": "https://github.com/michaelfranzl/captain-hook/issues"
   },
-  "homepage": "https://github.com/michaelfranzl/captain-hook"
+  "homepage": "https://github.com/michaelfranzl/captain-hook",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "uglify-js": "^3.1.5"
+  }
 }

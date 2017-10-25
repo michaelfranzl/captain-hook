@@ -1,3 +1,5 @@
+const CaptainHook = require('../dist/captain-hook.umd.min.js').default;
+
 // test custom attribute names
 var inst = CaptainHook({
   on_prop: 'my_on',
@@ -56,3 +58,5 @@ inst = CaptainHook({
 });
 inst.on('add', () => 5);
 console.assert(typeof inst._handlers == 'undefined');
+
+console.log("All tests succeeded!");
