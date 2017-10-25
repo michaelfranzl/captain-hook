@@ -1,5 +1,5 @@
 {
-  "name": "captain-hook",
+  "name": "@michaelfranzl/captain-hook",
   "version": "1.0.0",
   "description": "Configurable mix-in providing event hook functionality for JavaScript objects/prototypes",
   "main": "captain-hook.umd.js",
