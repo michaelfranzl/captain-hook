@@ -36,11 +36,11 @@ Features of my library:
 
 ## Development and building
 
-Install development dependencies (only needed to build the ES5/UMD versions):
+Install:
 
-    npm install
+    npm install @michaelfranzl/captain-hook
 
-To generate an UMD module that works in browsers and Node.js:
+To re-generate the UMD module from the source which works in browsers and Node.js (output to "dist" folder):
 
     npm run prepare
 
