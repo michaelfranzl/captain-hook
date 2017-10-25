@@ -2,17 +2,12 @@
 
 ## A configurable mix-in providing flexible event emission ("hooking") for JavaScript objects
 
-
-
-
-### Overview
-
 An event-emitter API enables clearly defined interaction between separate pieces of code (e.g. main application vs. plugins). Event emitting allows you to keep the functionality of your application general (make it more suitable to be published Open Source), while specializing its behavior by having external (perhaps proprietary) code hook into those events.
 
 Methods on your objects will be able to signal "events" to external "event handlers". External code can add event handlers via `.on()` and remove them via `.off()`, while your own object can call them via `._emit()`. The names of these three methods can be explicitly configured via the factory function.
 
 
-### Why inventing yet another event emitter?
+## Why inventing yet another event emitter?
 
 I found dozens of event emitter libraries on Github. Most of them were too large, too 'smart', or too restrictive.
 
@@ -36,7 +31,7 @@ Features of my library:
 * Flexible use: add the mix-in to prototypes or to instances (see below).
 
 
-### Development and building
+## Development and building
 
 Install development dependencies (only needed to build the ES5/UMD versions):
 
@@ -52,7 +47,7 @@ Run tests on the UMD module:
 
 
     
-### How to apply the mix-in
+## How to apply the mix-in
 
 If your environment can import ES6 modules directly, load `captain-hook.js`, otherwise load the Universal Module Definition (UMD) variant `dist/captain-hook.umd.min.js`.
 
@@ -60,7 +55,7 @@ The default export of the module is a factory function (see `CaptainHook()` in t
 
 The following 5 methods are equivalent in their effects.
 
-#### 1\. Mix into prototypes
+### 1\. Mix into prototypes
 
 Methods will be shared across all instances.
 
@@ -153,7 +148,7 @@ If you prefer to work with plain objects:
     // -> Oh no, another dog pooped!
 ```
     
-#### 2\. Mix into instances
+### 2\. Mix into instances
 
 Each instance will have a full copy of the attributes/methods.
 
@@ -215,10 +210,10 @@ If you prefer to work with plain objects:
 
 
 
-### API
+## API Reference
 
 
-#### CaptainHook(options)
+### CaptainHook(options)
 
 This is a factory function returning a plain object. The default method/property names for adding and removing handlers are `on()`, `off()`, and `_emit()`. The attached handlers are stored in a property named `_handlers` by default. All property names can be explicitly configured via the factory function to prevent naming conflicts, e.g.:
 
@@ -238,7 +233,7 @@ Options:
  
 
 
-#### on(eventname,handler[,opts])
+### on(eventname,handler[,opts])
 
 Add an event handler to an event name.
 
@@ -252,7 +247,13 @@ Add an event handler to an event name.
 
 
 
-#### off(eventname,tag)
+### once(eventname,handler[,opts])
+
+Add a one-time event handler to an event name. This is a wrapper for `on()` which sets `opts.once` to `true`.
+
+
+
+### off(eventname,tag)
 
 Remove an event handler named `tag` from `eventname`. If `tag` or `eventname` are not registered, this method does nothing.
 
@@ -261,7 +262,7 @@ Remove an event handler named `tag` from `eventname`. If `tag` or `eventname` ar
 
 
 
-#### _emit(eventname[,...args])
+### _emit(eventname[,...args])
 
 Run all registered event handlers for `eventname` with the argument list `...args`.
 
@@ -272,7 +273,7 @@ Run all registered event handlers for `eventname` with the argument list `...arg
 
 
 
-### Use cases for event emission
+## Use cases for event emission
 
 There are three distinct use cases for event handlers:
 
