@@ -45,7 +45,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * @property {AddEventHandler} on Associates an event handler function
 * with an event name.
 * @property {AddOneTimeEventHandler} once Same as {@link AddEventHandler}, but sets `options.once` to `true`.
-* @property {RemoveEventHandler} off Remove an event listener.
+* @property {RemoveEventHandler} off Remove an event handler.
 * @property {EmitEvent} _emit Call all registered event
 * handlers.
 */
@@ -112,7 +112,7 @@ var CaptainHook = function ({
     * `Function.call()` when calling `handler`, changing the meaning of `this`
     * inside `handler`. By default `this` in the `handler` is the object which
     * emitted the event.
-    * @param {Boolean} [options.once=false] - When `true` then `handler` runs nly
+    * @param {Boolean} [options.once=false] - When `true` then `handler` runs only
     * once, then is removed.
     */
     [on_prop] (eventname, callable, options={}) {
