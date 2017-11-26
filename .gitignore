@@ -4,3 +4,5 @@ bundle*
 *~
 *swp
 *.tgz
+*.html
+.nyc_output
