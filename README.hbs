@@ -11,7 +11,7 @@ Methods of your objects will be able to emit "events" to external "event handler
 The name "Captain Hook" is a play on the term ["Software Hook"](https://en.wikipedia.org/wiki/Hooking).
 
 
-## Why inventing yet another event emitter?
+# Why inventing yet another event emitter?
 
 I found dozens of event emitter libraries on Github. Most of them were too large, too 'smart', or too restrictive.
 
@@ -36,7 +36,7 @@ Features of this module:
 The [test file](tests/test.js) describes usage and features.
 
 
-## Development
+# Development
 
 Run tests:
 
@@ -80,7 +80,7 @@ Until ES6 imports are widely supported...
 
 
     
-## How to apply the mix-in
+# How to apply the mix-in
 
 If your environment can import ES6 modules directly, load `captain-hook.js`, otherwise load the Universal Module Definition (UMD) variant `dist/captain-hook.umd.min.js`.
 
@@ -88,7 +88,7 @@ The default export of the module is a factory function (see `CaptainHook()` in t
 
 The following 5 methods are equivalent in their effects.
 
-### 1\. Mix into prototypes
+## 1\. Mix into prototypes
 
 Methods will be shared across all instances.
 
@@ -181,7 +181,7 @@ If you prefer to work with plain objects:
     // -> Oh no, another dog pooped!
 ```
     
-### 2\. Mix into instances
+## 2\. Mix into instances
 
 Each instance will have a full copy of the attributes/methods.
 
@@ -250,7 +250,7 @@ If you prefer to work with plain objects:
 
 
 
-## Use cases for event emission
+# Use cases for event emission
 
 There are three distinct use cases for event handlers:
 
