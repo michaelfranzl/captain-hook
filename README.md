@@ -332,7 +332,7 @@ Associates an event handler function with an event name.
 | callable | [<code>EventHandler</code>](#EventHandler) |  |  |
 | [options] | <code>Object</code> | <code>{}</code> |  |
 | [options.tag] | <code>String</code> |  | Name tag of handler |
-| [options.priority] | <code>Number</code> |  | Execution order of handlers is sorted by this number. Higher priority will be sorted first. |
+| [options.priority] | <code>Number</code> | <code>10</code> | Execution order of handlers is sorted by this number. Higher priority will be sorted first. |
 | [options.context] | <code>Object</code> |  | Value to use for the first argument of `Function.call()` when calling `handler`, changing the meaning of `this` inside `handler`. By default `this` in the `handler` is the object which emitted the event. |
 | [options.once] | <code>Boolean</code> | <code>false</code> | When `true` then `handler` runs nly once, then is removed. |
 

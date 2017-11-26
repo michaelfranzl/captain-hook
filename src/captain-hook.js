@@ -106,7 +106,7 @@ var CaptainHook = function ({
     * @param {EventHandler} callable
     * @param {Object} [options={}]
     * @param {String} [options.tag] - Name tag of handler
-    * @param {Number} [options.priority] - Execution order of handlers is sorted
+    * @param {Number} [options.priority=10] - Execution order of handlers is sorted
     * by this number. Higher priority will be sorted first.
     * @param {Object} [options.context] - Value to use for the first argument of
     * `Function.call()` when calling `handler`, changing the meaning of `this`
