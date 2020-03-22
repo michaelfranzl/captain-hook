@@ -2,8 +2,6 @@
 
 ## Configurable event emitter behavior for mixing into JavaScript objects/prototypes/classes
 
-[![Build Status](https://travis-ci.org/michaelfranzl/captain-hook.svg?branch=master)](https://travis-ci.org/michaelfranzl/captain-hook)
-
 An event emitter API clearly defines interaction between separate pieces of code (e.g. main application vs. plugins). Event emitting allows you to keep the functionality of your application general (make it more suitable to be published Open Source), while external (perhaps even proprietary) code makes the application's behavior more specific.
 
 Methods of your objects will be able to emit "events" to external "event handlers". External code can add event handlers via `.on()` and remove them via `.off()`, while your own object can call them via `._emit()`. The names of these three methods can be explicitly configured via the factory function.
