@@ -1,8 +1,8 @@
 # captain-hook
 
-## Configurable event emitter behavior for mixing into JavaScript objects/prototypes/classes
+![Test](https://github.com/michaelfranzl/captain-hook/workflows/Test/badge.svg)
 
-[![Build Status](https://travis-ci.org/michaelfranzl/captain-hook.svg?branch=master)](https://travis-ci.org/michaelfranzl/captain-hook)
+## Configurable event emitter behavior for mixing into JavaScript objects/prototypes/classes
 
 An event emitter API clearly defines interaction between separate pieces of code (e.g. main application vs. plugins). Event emitting allows you to keep the functionality of your application general (make it more suitable to be published Open Source), while external (perhaps even proprietary) code makes the application's behavior more specific.
 
@@ -11,27 +11,22 @@ Methods of your objects will be able to emit "events" to external "event handler
 The name "Captain Hook" is a play on the term ["Software Hook"](https://en.wikipedia.org/wiki/Hooking).
 
 
-# Why inventing yet another event emitter?
+# Why invent yet another event emitter?
 
-I found dozens of event emitter libraries on Github. Most of them were too large, too 'smart', or too restrictive.
-
-Features of this module:
-
+* Attribute/method names are configurable
+* Returns to the event emitter return values from event handlers as an array
+* When adding event handlers, a supplied option object allows
+  * sorting the handler according to given priority,
+  * setting the `this` context of the handler,
+  * setting of a tag/label of the handler.
+* Event handlers can only be removed when their tag is known. Prevents interaction between subscribers.
+* The storage object for event handlers and their options can be privately scoped if needed. This is to ensure that external plugins cannot remove or inspect each other's event handlers (privacy).
+* Flexible use: add the mix-in to prototypes, plain objects, classes or to instances thereof (see below).
 * No dependencies.
 * Only ~100 lines of code.
 * Only ~2.4 kilobytes minified.
 * Works in browsers and in Node.js.
-* Includes distribution file with source map.
 * Extensive tests.
-* Attribute/method names are explicitly configurable.
-* Returns to the emitter optional return values from event handlers as an array
-* When adding event handlers, a supplied option object allows
-   * sorting the handler according to given priority,
-   * setting the `this` context of the handler,
-   * setting of a tag/label of the handler.
-* Event handlers can only be removed when their tag is known. Prevents interaction between external plugin code.
-* The storage object for event handlers and their options can be privately scoped if needed. This is to ensure that external plugins cannot remove or inspect each other's event handlers.
-* Flexible use: add the mix-in to prototypes, plain objects, classes or to instances thereof (see below).
 
 The [test file](tests/test.js) describes usage and features.
 
@@ -40,49 +35,17 @@ The [test file](tests/test.js) describes usage and features.
 
 Run tests:
 
-    npm test
-    
-Run code coverage:
+```sh
+npm test
+```
 
-    npm run coverage
-    
-Regenerate distribution files (`dist/captain-hook.umd.min.js` and `dist/captain-hook.umd.min.js.map`):
-
-    gulp build
-    
 Generate `README.md` with API documentation parsed from `jsdoc` sources:
 
-    gulp readme
-    
-ES6 import:
-
-```javascript
-    import EventEmitter from 'captain-hook';
+```sh
+node scripts/make_readme.cjs
 ```
 
-Until ES6 imports are widely supported...
-
-... import in Node.js:
-
-```javascript
-    const CaptainHook = require('../dist/captain-hook.umd.min.js');
-```
-    
-... import in browsers:
-
-    <script src="./dist/captain-hook.umd.min.js"></script>
-    <script>
-      window.addEventListener("load", function() {
-        var EventEmitter = window.CaptainHook;
-        var ee = EventEmitter(); // to use as mix-in
-      });
-    </script>
-
-
-    
-# How to apply the mix-in
-
-If your environment can import ES6 modules directly, load `captain-hook.js`, otherwise load the Universal Module Definition (UMD) variant `dist/captain-hook.umd.min.js`.
+# How to use
 
 The default export of the module is a factory function (see `CaptainHook()` in the API section).
 
@@ -95,151 +58,150 @@ Methods will be shared across all instances.
 If you prefer classes:
 
 ```javascript
-    captain_hook = CaptainHook(); // use defaults
-    
-    class Dog {
-      constructor(name) {
-        this.name = name;
-      }
-      poop() {
-        console.log(`I am pooping.`)
-        this._emit('poop');
-      }
-    }
-    
-    Object.assign(Dog.prototype, captain_hook);
-    
-    luna = new Dog('Luna');
-    luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); } )
-    luna.poop();
-    // -> I am pooping
-    // -> Cleaning up poop of Luna
-    
-    elvis = new Dog('Elvis');
-    elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
-    elvis.poop();
-    // -> I am pooping
-    // -> Oh no, another dog pooped!
+captain_hook = CaptainHook(); // use defaults
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+  poop() {
+    console.log(`I am pooping.`)
+    this._emit('poop');
+  }
+}
+
+Object.assign(Dog.prototype, captain_hook);
+
+luna = new Dog('Luna');
+luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); } )
+luna.poop();
+// -> I am pooping
+// -> Cleaning up poop of Luna
+
+elvis = new Dog('Elvis');
+elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
+elvis.poop();
+// -> I am pooping
+// -> Oh no, another dog pooped!
 ```
 
-If you prefer 'old-style' prototypes:
+If you prefer prototype functions:
 
 ```javascript
-    captain_hook = CaptainHook();
+captain_hook = CaptainHook();
 
-    function Dog(name) {
-      this.name = name;
-    }
+function Dog(name) {
+  this.name = name;
+}
 
-    Object.assign(Dog.prototype, captain_hook);
+Object.assign(Dog.prototype, captain_hook);
 
-    Dog.prototype.poop = function() {
-      console.log(`I am pooping.`)
-      this._emit('poop');
-    }
+Dog.prototype.poop = function() {
+  console.log(`I am pooping.`)
+  this._emit('poop');
+}
 
-    luna = new Dog('Luna');
-    luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); } )
-    luna.poop();
-    // -> I am pooping
-    // -> Cleaning up poop of Luna
-    
-    elvis = new Dog('Elvis');
-    elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
-    elvis.poop();
-    // -> I am pooping
-    // -> Oh no, another dog pooped!
+luna = new Dog('Luna');
+luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); } )
+luna.poop();
+// -> I am pooping
+// -> Cleaning up poop of Luna
+
+elvis = new Dog('Elvis');
+elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
+elvis.poop();
+// -> I am pooping
+// -> Oh no, another dog pooped!
 ```
 
 If you prefer to work with plain objects:
 
 ```javascript
-    captain_hook = CaptainHook();
+captain_hook = CaptainHook();
 
-    proto_dog = {};
-    proto_dog.poop = function() { 
-      console.log(`I am pooping.`);
-      this._emit('poop', this.name);
-    }
-    
-    proto_eventful_dog = Object.assign(proto_dog, captain_hook);
+proto_dog = {};
+proto_dog.poop = function() {
+  console.log(`I am pooping.`);
+  this._emit('poop', this.name);
+}
 
-    // create a new object from a prototype
-    luna = Object.create(proto_eventful_dog);
-    luna.name = 'Luna';
-    luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); });
-    luna.poop();
-    // -> I am pooping
-    // -> Cleaning up poop of Luna
+proto_eventful_dog = Object.assign(proto_dog, captain_hook);
 
-    // create a new object from a prototype
-    elvis = Object.create(proto_eventful_dog);
-    elvis.name = 'Elvis';
-    elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); });
-    elvis.poop();
-    // -> I am pooping
-    // -> Oh no, another dog pooped!
+// create a new object from a prototype
+luna = Object.create(proto_eventful_dog);
+luna.name = 'Luna';
+luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); });
+luna.poop();
+// -> I am pooping
+// -> Cleaning up poop of Luna
+
+// create a new object from a prototype
+elvis = Object.create(proto_eventful_dog);
+elvis.name = 'Elvis';
+elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); });
+elvis.poop();
+// -> I am pooping
+// -> Oh no, another dog pooped!
 ```
-    
+
 ## 2\. Mix into instances
 
-Each instance will have a full copy of the attributes/methods.
+Each instance will have a full copy of the attributes and methods.
 
-In the example below, note that we pass the configuration `handlers_prop: null`. This makes the storage of the event handler functions private, preventing information leaks to external code.
+In the example below, note that we pass the configuration `handlers_prop: null`. This makes the storage of the event handler functions truly private, preventing information leaks to external code.
 
 ```javascript
-    class Dog {
-      constructor(name) {
-        var captain_hook = CaptainHook({handlers_prop: null});
-        Object.assign(this, captain_hook);
-        this.name = name;
-      }
-      poop() {
-        console.log(`I am pooping.`)
-        this._emit('poop');
-      }
-    }
+class Dog {
+  constructor(name) {
+    var captain_hook = CaptainHook({handlers_prop: null});
+    Object.assign(this, captain_hook);
+    this.name = name;
+  }
+  poop() {
+    console.log(`I am pooping.`)
+    this._emit('poop');
+  }
+}
 
-    luna = new Dog('Luna');
-    luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); })
-    luna.poop();
-    // -> I am pooping
-    // -> Cleaning up poop of Luna
-    
-    elvis = new Dog('Elvis');
-    elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
-    elvis.poop();
-    // -> I am pooping
-    // -> Oh no, another dog pooped!
-    
-    // Note that there is no way to read or modify the added event handlers via the `luna` or `elvis` instances.
+luna = new Dog('Luna');
+luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); })
+luna.poop();
+// -> I am pooping
+// -> Cleaning up poop of Luna
+
+elvis = new Dog('Elvis');
+elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
+elvis.poop();
+// -> I am pooping
+// -> Oh no, another dog pooped!
+
+// Note that there is no way to read or modify the added event handlers via the `luna` or `elvis` instances.
 ```
-    
+
 If you prefer to work with plain objects:
 
 ```javascript
-    dog = {};
-    dog.poop = function() { 
-      console.log(`I am pooping.`);
-      this._emit('poop', this.name);
-    }
-    
-    luna = Object.assign({}, CaptainHook({handlers_prop: null}), dog);
-    luna.name = 'Luna';
-    luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); });
-    luna.poop();
-    // -> I am pooping
-    // -> Cleaning up poop of Luna
-    
-    elvis = Object.assign({}, CaptainHook({handlers_prop: null}), dog);
-    elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
-    elvis.poop();
-    // -> I am pooping
-    // -> Oh no, another dog pooped!
-    
-    // Note that there is no way to read or modify the added event handlers via the `luna` or `elvis` instances.
-```
+dog = {};
+dog.poop = function() {
+  console.log(`I am pooping.`);
+  this._emit('poop', this.name);
+}
 
+luna = Object.assign({}, CaptainHook({handlers_prop: null}), dog);
+luna.name = 'Luna';
+luna.on('poop', function() { console.log(`Cleaning up poop of ${this.name}`); });
+luna.poop();
+// -> I am pooping
+// -> Cleaning up poop of Luna
+
+elvis = Object.assign({}, CaptainHook({handlers_prop: null}), dog);
+elvis.on('poop', function() { console.log("Oh no, another dog pooped!"); })
+elvis.poop();
+// -> I am pooping
+// -> Oh no, another dog pooped!
+
+// Note that there is no way to read or modify the added event handlers via the `luna` or `elvis` instances.
+```
 
 
 # API Reference
@@ -248,7 +210,7 @@ If you prefer to work with plain objects:
 
 <dl>
 <dt><a href="#CaptainHook">CaptainHook([config])</a> ⇒ <code><a href="#EventEmitter">EventEmitter</a></code></dt>
-<dd><p>Factory returning a plain object implementing event emission behavior.</p>
+<dd><p>Factory function which returns a plain object which implements event emission behavior.</p>
 <p>The default method/property names for adding and removing handlers are
 <code>on()</code>, <code>off()</code>, and <code>_emit()</code>. The attached event handler functions are
 stored in a property named <code>_handlers</code>.</p>
@@ -291,7 +253,7 @@ objects, classes, or prototypes. See README for illustrations.</p>
 <a name="CaptainHook"></a>
 
 ## CaptainHook([config]) ⇒ [<code>EventEmitter</code>](#EventEmitter)
-Factory returning a plain object implementing event emission behavior.
+Factory function which returns a plain object which implements event emission behavior.
 
 The default method/property names for adding and removing handlers are
 `on()`, `off()`, and `_emit()`. The attached event handler functions are
@@ -407,10 +369,7 @@ objects, classes, or prototypes. See README for illustrations.
 
 
 
-
-
-
-# Use cases for event emission
+# Use cases
 
 There are three distinct use cases for event handlers:
 
@@ -423,124 +382,124 @@ All three cases can be covered with the `on()` method.
 To illustrate, we are going to implement a simple Cat:
 
 ```javascript
-    var Cat = function() {
-      var self = this; // be explicit
+var Cat = function() {
+  var self = this; // be explicit
 
-      // Generate the mix-in object with default property names
-      var hook_mixin = CaptainHook();
+  // Generate the mix-in object with default property names
+  var hook_mixin = CaptainHook();
 
-      // Mix in the generated hook functionality.
-      // This makes available to us self.on(), self.off(), self._emit()
-      Object.assign(self, hook_mixin);
+  // Mix in the generated hook functionality.
+  // This makes available to us self.on(), self.off(), self._emit()
+  Object.assign(self, hook_mixin);
 
-      self.makeSound = function() {
-        var obj = {sound: 'meow'};
-        self._emit('makeSound', obj);
-        console.log(`I make sound: "${obj.sound}"`);
-      };
+  self.makeSound = function() {
+    var obj = {sound: 'meow'};
+    self._emit('makeSound', obj);
+    console.log(`I make sound: "${obj.sound}"`);
+  };
 
-      self.scratch = function() {
-        var allowed = self._emit('scratch').reduce(function(acc, val) {
-          return acc && val
-        }, true);
-        
-        // All event handlers need to return true if this action is to be allowed.
-        if (allowed) {
-          console.log("Scratch!");
-        } else {
-          console.log("I am not allowed to scratch, so I won't do it!");
-        }
-      };
-      
-      self.beHungry = function() {
-        Promise.all(self._emit('askForFood'))
-        .then(function(given_foods) {
-          console.log("I am eating", given_foods);
-        })
-      }
-    };
+  self.scratch = function() {
+    var allowed = self._emit('scratch').reduce(function(acc, val) {
+      return acc && val
+    }, true);
+
+    // All event handlers need to return true if this action is to be allowed.
+    if (allowed) {
+      console.log("Scratch!");
+    } else {
+      console.log("I am not allowed to scratch, so I won't do it!");
+    }
+  };
+
+  self.beHungry = function() {
+    Promise.all(self._emit('askForFood'))
+    .then(function(given_foods) {
+      console.log("I am eating", given_foods);
+    })
+  }
+};
 ```
 
 Instantiate the application:
 
 ```javascript
-    var felix = new Cat();
+var felix = new Cat();
 ```
-    
+
 Generic behavior:
-    
+
 ```javascript
-    felix.makeSound();
-    // -> I make sound: "meow"
-    
-    felix.scratch();
-    // -> Scratch!
+felix.makeSound();
+// -> I make sound: "meow"
+
+felix.scratch();
+// -> Scratch!
 ```
-    
+
 Use event handlers in three possible ways:
 
 **1\. Simple observer** (no return value, no content filtering):
 
 ```javascript
-    felix.on('makeSound', function() {
-      console.log("Felix is about to make a sound.")
-    });
-    
-    felix.makeSound();
-    
-    // -> Felix is about to make a sound.
-    // -> I make sound: "meow"
+felix.on('makeSound', function() {
+  console.log("Felix is about to make a sound.")
+});
+
+felix.makeSound();
+
+// -> Felix is about to make a sound.
+// -> I make sound: "meow"
 ```
 
 **2\. Filter content passed by reference** (no return value):
 
 ```javascript
-    felix.on('makeSound', function(opts) {
-      opts.sound += ' hiss';
-    });
-    
-    felix.makeSound();
-    // -> I make sound: "meow hiss"
+felix.on('makeSound', function(opts) {
+  opts.sound += ' hiss';
+});
+
+felix.makeSound();
+// -> I make sound: "meow hiss"
 ```
 
 **3\. Query responses.** Note that event handlers do not have access to the return values of any other event handler. Here, we define two event handlers who vote for different outcomes:
 
 ```javascript
-    felix.on('scratch', function() {
-      return false; // I do not allow scratching.
-    });
-    
-    felix.on('scratch', function() {
-      return true; // I allow scratching.
-    });
-    
-    felix.scratch();
-    // -> I am not allowed to scratch, so I won't do it!
+felix.on('scratch', function() {
+  return false; // I do not allow scratching.
+});
+
+felix.on('scratch', function() {
+  return true; // I allow scratching.
+});
+
+felix.scratch();
+// -> I am not allowed to scratch, so I won't do it!
 ```
-    
+
 This is also useful for Promises:
-    
+
 ```javascript
-    felix.on('askForFood', function() {
-      console.log('Felix is asking for food');
-      return new Promise(function(resolve, reject) {
-        setTimeout(function() {
-          console.log('I am giving felix food');
-          resolve('dryfood');
-        }, 1000);
-      })
-    });
-    
-    felix.on('askForFood', function() {
-      console.log('Felix is asking for food');
-      return new Promise(function(resolve, reject) {
-        setTimeout(function() {
-          console.log('I am giving felix food');
-          resolve('sardines');
-        }, 2000);
-      })
-    });
-    
-    felix.beHungry()
-    // after 2 seconds -> I am eating ["dryfood", "sardines"]
+felix.on('askForFood', function() {
+  console.log('Felix is asking for food');
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      console.log('I am giving felix food');
+      resolve('dryfood');
+    }, 1000);
+  })
+});
+
+felix.on('askForFood', function() {
+  console.log('Felix is asking for food');
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      console.log('I am giving felix food');
+      resolve('sardines');
+    }, 2000);
+  })
+});
+
+felix.beHungry()
+// after 2 seconds -> I am eating ["dryfood", "sardines"]
 ```
