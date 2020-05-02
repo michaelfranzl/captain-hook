@@ -97,7 +97,7 @@ function CaptainHook({
       // Choose and initialize the handlers storage
       let handlers;
       if (handlersPropName) {
-        if (!this[handlersPropName]) this[handlersPropName] = {}
+        if (!this[handlersPropName]) this[handlersPropName] = {};
         handlers = this[handlersPropName];
       } else {
         handlers = privatehandlers;
